@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Menu from "./screens/Menu";
+import HomeScreen from "./screens/HomeScreen";
+import ReceiveMenu from "./screens/ReceiveMenu";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import SendMenu from "./screens/SendMenu";
+import EditMenu from "./screens/EditMenu";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>รายการส่งนม</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ReceiveMenu" component={ReceiveMenu} />
+        <Stack.Screen name="Menu" component={Menu} />
+        <Stack.Screen name="SendMenu" component={SendMenu} />
+        <Stack.Screen name="EditMenu" component={EditMenu} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
