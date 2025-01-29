@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, ActivityIndicator, Text } from "react-native";
 import axios from "axios";
 import { CheckBox } from "react-native-elements";
-import Header from "../component/Header";
-import Button1 from "../component/ButtonProps";
-import ButtonBack from "../component/BackButton";
+import Header from "../../component/Header";
+import Button1 from "../../component/ButtonProps";
+import ButtonBack from "../../component/BackButton";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const SendMenu = ({ navigation }: { navigation: any }) => {
@@ -27,6 +27,7 @@ const SendMenu = ({ navigation }: { navigation: any }) => {
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
           <Header title="ส่งนม" />
           <ButtonBack text="back" onPress={() => navigation.goBack()} />
+            
           <View style={styles.container}>
             {loading ? (
               <ActivityIndicator size="large" color="#00BFFF" />
@@ -35,7 +36,7 @@ const SendMenu = ({ navigation }: { navigation: any }) => {
                 data={data}
                 renderItem={({ item }) => (
                   <View style={styles.item}>
-                    <Button1 text={item.name} onPress={() => {}} />
+                    <Button1 text={item.name} onPress={() => navigation.navigate("ShowSchool",{item})} />
                     <CheckBox
                       checked={item.status}
                       disabled 
@@ -63,8 +64,8 @@ const styles = StyleSheet.create({
     marginVertical: 10, // เพิ่มช่องว่างระหว่างปุ่ม
     alignItems: "center",
     flexDirection: "row",
-
   },
+  
 });
 
 export default SendMenu;

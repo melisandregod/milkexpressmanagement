@@ -5,8 +5,9 @@ import Menu from "./screens/Menu";
 import HomeScreen from "./screens/HomeScreen";
 import ReceiveMenu from "./screens/ReceiveMenu";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import SendMenu from "./screens/SendMenu";
+import SendMenu from "./screens/SendPages/SendMenu";
 import EditMenu from "./screens/EditMenu";
+import ShowSchool from "./screens/SendPages/ShowSchool";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const App = () => {
         <Stack.Screen name="ReceiveMenu" component={ReceiveMenu} />
         <Stack.Screen name="Menu" component={Menu} />
         <Stack.Screen name="SendMenu" component={SendMenu} />
+        <Stack.Screen name="ShowSchool" component={ShowSchool} />
         <Stack.Screen name="EditMenu" component={EditMenu} />
       </Stack.Navigator>
     </NavigationContainer>
