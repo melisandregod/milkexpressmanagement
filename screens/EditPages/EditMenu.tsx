@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Alert ,Text} from "react-native";
-import Header from "../component/Header";
-import Button1 from "../component/ButtonProps";
-import ButtonBack from "../component/BackButton";
+import Header from "../../component/Header";
+import Button1 from "../../component/ButtonProps";
+import ButtonBack from "../../component/BackButton";
 import { SafeAreaView ,SafeAreaProvider} from "react-native-safe-area-context";
 
 const EditMenu = ({ navigation }: { navigation: any }) => {
@@ -13,8 +13,8 @@ const EditMenu = ({ navigation }: { navigation: any }) => {
         <Header title="เเก้ไขข้อมูล" />
         <ButtonBack text="back" onPress={() => navigation.goBack()} />
         <View style={styles.container}>
-          <Button1 text="เเก้ไขรับนม" onPress={() => navigation.goBack()}/>
-          <Button1 text="เเก้ไขส่งนม" onPress={() => navigation.goBack()}/>
+          <Button1 text="เเก้ไขรับนม" onPress={() => navigation.navigate("EditReceiveMenu")}/>
+          <Button1 text="เเก้ไขส่งนม" onPress={() => navigation.navigate("EditSchool")}/>
         </View>
         </View>
       </SafeAreaView>

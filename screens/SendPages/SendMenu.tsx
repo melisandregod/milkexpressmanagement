@@ -1,25 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, ActivityIndicator, Text } from "react-native";
-import axios from "axios";
+import React, { useEffect, useState, useCallback } from "react";
+import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { useFocusEffect } from "@react-navigation/native"; // ✅ ใช้ useFocusEffect
 import { CheckBox } from "react-native-elements";
 import Header from "../../component/Header";
 import Button1 from "../../component/ButtonProps";
 import ButtonBack from "../../component/BackButton";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { getAllSchools, initDB, insertDummyData } from "../../database/SchoolDB"; // ✅ ใช้ SQLite
 
 const SendMenu = ({ navigation }: { navigation: any }) => {
   const [data, setData] = useState<{ id: number; name: string; quantity: number; status: boolean }[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // ✅ โหลดข้อมูลทุกครั้งที่เข้าสู่หน้านี้
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
+
   useEffect(() => {
-    axios
-      .get("https://api.sheety.co/392bcea488b7b654d987cdaa7ee93437/schoolDb/db")
-      .then((response) => {
-        setData(response.data.db);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    const initializeDatabase = async () => {
+      await initDB(); // ✅ ตรวจสอบตาราง
+      await insertDummyData(); // ✅ เพิ่มข้อมูลถ้ายังไม่มี
+      await loadData(); // ✅ โหลดข้อมูล
+    };
+
+    initializeDatabase();
   }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    const schools = await getAllSchools();
+    setData(schools);
+    setLoading(false);
+  };
 
   return (
     <SafeAreaProvider>
@@ -27,7 +42,7 @@ const SendMenu = ({ navigation }: { navigation: any }) => {
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
           <Header title="ส่งนม" />
           <ButtonBack text="back" onPress={() => navigation.goBack()} />
-            
+
           <View style={styles.container}>
             {loading ? (
               <ActivityIndicator size="large" color="#00BFFF" />
@@ -36,11 +51,8 @@ const SendMenu = ({ navigation }: { navigation: any }) => {
                 data={data}
                 renderItem={({ item }) => (
                   <View style={styles.item}>
-                    <Button1 text={item.name} onPress={() => navigation.navigate("ShowSchool",{item})} />
-                    <CheckBox
-                      checked={item.status}
-                      disabled 
-                    />
+                    <Button1 text={item.name} onPress={() => navigation.navigate("ShowSchool", { id: item.id })} />
+                    <CheckBox checked={item.status} disabled />
                   </View>
                 )}
                 keyExtractor={(item) => item.id.toString()}
@@ -61,11 +73,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   item: {
-    marginVertical: 10, // เพิ่มช่องว่างระหว่างปุ่ม
+    marginVertical: 10,
     alignItems: "center",
     flexDirection: "row",
   },
-  
 });
 
 export default SendMenu;

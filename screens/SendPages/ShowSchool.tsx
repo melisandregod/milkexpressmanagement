@@ -7,77 +7,77 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import Header from "../../component/Header";
-import "react-native-gesture-handler";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native"; // ✅ ใช้ useFocusEffect
+import Header from "../../component/Header";
 import ButtonBack from "../../component/BackButton";
-import axios from "axios";
+import { getSchoolById, updateSchoolStatus } from "../../database/SchoolDB"; // ✅ ใช้ SQLite
 
 const ShowSchool = ({ navigation, route }: { navigation: any; route: any }) => {
-  const { item } = route.params;
-  const [status, setStatus] = useState(item.status); // ใช้ State เก็บค่า Status ปัจจุบัน
-  const [loading, setLoading] = useState(false); // เพิ่ม State สำหรับ Loading
+  const { id } = route.params; // ✅ รับเฉพาะ id แล้วดึงข้อมูลเอง
+  const [item, setItem] = useState<any>(null);
+  const [status, setStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // ฟังก์ชันอัปเดต Status เป็น true
-  const handleConfirm = () => {
-    setLoading(true); // เริ่ม Loading
-    axios
-      .put(
-        `https://api.sheety.co/392bcea488b7b654d987cdaa7ee93437/schoolDb/db/${item.id}`,
-        {
-          db: {
-            id: item.id,
-            name: item.name,
-            phoneNumber: item.phoneNumber,
-            quantity: item.quantity,
-            googlemap: item.googlemap,
-            status: true, // เปลี่ยนเป็น true
-          },
-        }
-      )
-      .then(() => {
-        setStatus(true);
-        Alert.alert("สำเร็จ", "การส่งได้รับการยืนยันแล้ว!");
-      })
-      .catch((error) => {
-        console.error(error);
-        Alert.alert("ผิดพลาด", "ไม่สามารถอัปเดตข้อมูลได้");
-      })
-      .finally(() => {
-        setLoading(false); // หยุด Loading ไม่ว่า success หรือ error
-      });
+  // ✅ โหลดข้อมูลทุกครั้งที่กลับมาหน้านี้
+  useFocusEffect(
+    useCallback(() => {
+      loadSchool();
+    }, [])
+  );
+
+  useEffect(() => {
+    loadSchool();
+  }, []);
+
+  const loadSchool = async () => {
+    const school = await getSchoolById(id);
+    if (school) {
+      setItem(school);
+      setStatus(school.status === 1);
+    }
   };
+
+  const handleConfirm = async () => {
+    if (!item) return;
+    setLoading(true);
+    const success = await updateSchoolStatus(item.id, true); // ✅ อัปเดตค่าเป็น true
+    setLoading(false);
+    if (success) {
+      setStatus(true);
+      Alert.alert("✅ สำเร็จ", "การส่งได้รับการยืนยันแล้ว!");
+    } else {
+      Alert.alert("❌ ผิดพลาด", "ไม่สามารถอัปเดตข้อมูลได้");
+    }
+  };
+
+  if (!item) return <ActivityIndicator size="large" color="#00BFFF" />;
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.statusbar}>
         <Header title={item.name} />
-        <View style={{flex: 0,backgroundColor: "#ffff"}}>
+        <View style={{ flex: 0, backgroundColor: "#ffff" }}>
           <ButtonBack text="back" onPress={() => navigation.goBack()} />
         </View>
         <View style={styles.container}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoText}>
-              📞 เบอร์ติดต่อ: {item.phoneNumber}
-            </Text>
+            <Text style={styles.infoText}>📞 เบอร์ติดต่อ: {item.phoneNumber}</Text>
             <Text style={styles.infoText}>📦 จำนวน: {item.quantity} ซอง</Text>
           </View>
 
-          {/* กล่อง Google Map */}
+          {/* Google Map */}
           <View style={styles.mapContainer}>
             <Text style={styles.mapText}>Google Map</Text>
-            <Text
-              style={styles.mapLink}
-              onPress={() => Linking.openURL(item.googlemap)}
-            >
+            <Text style={styles.mapLink} onPress={() => Linking.openURL(item.googlemap)}>
               เปิดแผนที่
             </Text>
           </View>
 
-          {/* แสดงปุ่มหรือ Loading Indicator */}
+          {/* ปุ่มยืนยัน */}
           {!status ? (
-            loading ? ( // ถ้า loading เป็น true ให้แสดง ActivityIndicator
+            loading ? (
               <ActivityIndicator size="large" color="#00BFFF" />
             ) : (
               <TouchableOpacity onPress={handleConfirm} style={styles.button}>
