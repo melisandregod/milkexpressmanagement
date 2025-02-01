@@ -40,14 +40,14 @@ export const insertDummyData = async () => {
   
       await db.execAsync(`
         INSERT INTO schools (id, name, phoneNumber, quantity, googlemap, status) VALUES 
-        (1, 'School 1', '123456789', 1, 'test', 1),
-        (2, 'School 2', '123456789', 2, 'test', 0),
-        (3, 'School 3', '123456789', 3, 'test', 1),
-        (4, 'School 4', '123456789', 4, 'test', 0),
-        (5, 'School 5', '123456789', 5, 'test', 1),
-        (6, 'School 5', '123456789', 5, 'test', 0),
-        (7, 'School 5', '123456789', 5, 'test', 1),
-        (9, 'School 5', '123456789', 5, 'test', 0);
+        (1, 'School 1', '123456789', 1, '13.1145784,99.937492', 1),
+        (2, 'School 2', '123456789', 2, '13.1145784,99.937492', 0),
+        (3, 'School 3', '123456789', 3, '13.1145784,99.937492', 1),
+        (4, 'School 4', '123456789', 4, '13.1145784,99.937492', 0),
+        (5, 'School 5', '123456789', 5, '13.1145784,99.937492', 1),
+        (6, 'School 5', '123456789', 5, '13.1145784,99.937492', 0),
+        (7, 'School 5', '123456789', 5, '13.1145784,99.937492', 1),
+        (9, 'School 5', '123456789', 5, '13.1145784,99.937492', 0);
       `);
       console.log("✅ เพิ่มข้อมูลสำเร็จ!");
     } catch (error) {
@@ -95,7 +95,7 @@ export const insertDummyData = async () => {
       return true; 
     } catch (error) {
       console.error("❌ Update Status Error:", error);
-      return false; 
+      return false; // ❌ คืนค่า false ถ้าเกิดข้อผิดพลาด
     }
   };
   

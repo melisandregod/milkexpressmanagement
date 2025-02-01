@@ -16,6 +16,7 @@ import EditReceiveMenu from "./screens/EditPages/EditReceiveMenu";
 import EditIce from "./screens/EditPages/EditIce";
 
 
+
 const Stack = createStackNavigator();
 
 const App = () => {

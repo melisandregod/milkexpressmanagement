@@ -9,18 +9,18 @@ import {
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect, useCallback } from "react";
-import { useFocusEffect } from "@react-navigation/native"; // ✅ ใช้ useFocusEffect
+import { useFocusEffect } from "@react-navigation/native";
 import Header from "../../component/Header";
 import ButtonBack from "../../component/BackButton";
-import { getSchoolById, updateSchoolStatus } from "../../database/SchoolDB"; // ✅ ใช้ SQLite
+import { getSchoolById, updateSchoolStatus } from "../../database/SchoolDB";
+import Map from "../../component/ShowSchoolMap";
 
 const ShowSchool = ({ navigation, route }: { navigation: any; route: any }) => {
-  const { id } = route.params; // ✅ รับเฉพาะ id แล้วดึงข้อมูลเอง
+  const { id } = route.params;
   const [item, setItem] = useState<any>(null);
   const [status, setStatus] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ โหลดข้อมูลทุกครั้งที่กลับมาหน้านี้
   useFocusEffect(
     useCallback(() => {
       loadSchool();
@@ -63,19 +63,20 @@ const ShowSchool = ({ navigation, route }: { navigation: any; route: any }) => {
         </View>
         <View style={styles.container}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoText}>📞 เบอร์ติดต่อ: {item.phoneNumber}</Text>
+            <Text style={styles.infoText}>
+              📞 เบอร์ติดต่อ: {item.phoneNumber}
+            </Text>
             <Text style={styles.infoText}>📦 จำนวน: {item.quantity} ซอง</Text>
           </View>
 
-          {/* Google Map */}
-          <View style={styles.mapContainer}>
-            <Text style={styles.mapText}>Google Map</Text>
-            <Text style={styles.mapLink} onPress={() => Linking.openURL(item.googlemap)}>
-              เปิดแผนที่
-            </Text>
+          <View style={{ flex: 1, width: "100%", height: 300 }}>
+            {item.googlemap ? (
+              <Map googlemap={item.googlemap} />
+            ) : (
+              <Text>📍 ไม่มีพิกัด</Text>
+            )}
           </View>
 
-          {/* ปุ่มยืนยัน */}
           {!status ? (
             loading ? (
               <ActivityIndicator size="large" color="#00BFFF" />

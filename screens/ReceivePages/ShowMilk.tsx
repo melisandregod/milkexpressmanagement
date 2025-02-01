@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, Linking, Button, ActivityIndicator } from "reac
 import Header from "../../component/Header";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import ButtonBack from "../../component/BackButton";
-import { getMilkFactory, initMilkDB, insertDummyMilkFactory } from "../../database/MilkDB"; // ✅ ใช้ DB ของโรงนม
+import { getMilkFactory, initMilkDB, insertDummyMilkFactory } from "../../database/MilkDB"; 
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const ShowMilk = ({ navigation }: { navigation: any }) => {
   const [item, setItem] = useState<any>(null);
@@ -38,10 +39,22 @@ const ShowMilk = ({ navigation }: { navigation: any }) => {
 
           {/* Google Map */}
           <View style={styles.mapContainer}>
-            <Text style={styles.mapText}>Google Map</Text>
-            <Text style={styles.mapLink} onPress={() => Linking.openURL(item?.googlemap)}>
-              เปิดแผนที่
-            </Text>
+          <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              initialRegion={{
+                latitude: 13.7563, // ✅ ตั้งค่าพิกัดเอง (เปลี่ยนได้)
+                longitude: 100.5018,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            >
+              <Marker
+                coordinate={{ latitude: 13.7563, longitude: 100.5018 }}
+                title="โรงงานน้ำแข็ง"
+                description="ตำแหน่งตัวอย่าง"
+              />
+            </MapView>
           </View>
 
       
@@ -80,22 +93,16 @@ const styles = StyleSheet.create({
   mapContainer: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    width: "100%",
+    height: 600, // ✅ กำหนดความสูงแผนที่
+    backgroundColor: "#f8f8f8",
     borderWidth: 1,
     borderColor: "black",
-    width: "100%",
-    backgroundColor: "#f8f8f8",
     marginBottom: 20,
   },
-  mapText: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  mapLink: {
-    fontSize: 16,
-    color: "blue",
-    textDecorationLine: "underline",
-    marginTop: 5,
+  map: {
+    width: "100%",
+    height: "100%",
   },
 });
 
