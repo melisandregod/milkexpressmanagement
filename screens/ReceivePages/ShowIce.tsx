@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Linking, Button, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import Header from "../../component/Header";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import ButtonBack from "../../component/BackButton";
-import { getIceFactory, initIceDB, insertDummyIceFactory } from "../../database/IceDB";
+import {
+  getIceFactory,
+  initIceDB,
+  insertDummyIceFactory,
+} from "../../database/IceDB";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const ShowIce = ({ navigation }: { navigation: any }) => {
@@ -15,8 +26,8 @@ const ShowIce = ({ navigation }: { navigation: any }) => {
   }, []);
 
   const loadFactory = async () => {
-    await initIceDB(); 
-    await insertDummyIceFactory(); 
+    await initIceDB();
+    await insertDummyIceFactory();
     const factory = await getIceFactory();
     if (factory) setItem(factory);
     setLoading(false);
@@ -29,17 +40,30 @@ const ShowIce = ({ navigation }: { navigation: any }) => {
       <SafeAreaView style={styles.statusbar}>
         <Header title={item?.name ?? "ไม่พบข้อมูล"} />
         <View style={{ flex: 0, backgroundColor: "#ffff" }}>
-          <ButtonBack text="back" onPress={() => navigation.goBack()} />
+          <ButtonBack
+            text="back"
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                alert("No screen to go back to!");
+              }
+            }}
+          />
         </View>
         <View style={styles.container}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoText}>📞 เบอร์ติดต่อ: {item?.phoneNumber ?? "ไม่มีข้อมูล"}</Text>
-            <Text style={styles.infoText}>📦 ปริมาณ: {item?.quantity ?? "ไม่มีข้อมูล"} กิโล</Text>
+            <Text style={styles.infoText}>
+              📞 เบอร์ติดต่อ: {item?.phoneNumber ?? "ไม่มีข้อมูล"}
+            </Text>
+            <Text style={styles.infoText}>
+              📦 ปริมาณ: {item?.quantity ?? "ไม่มีข้อมูล"} กิโล
+            </Text>
           </View>
 
           {/* Google Map */}
           <View style={styles.mapContainer}>
-          <MapView
+            <MapView
               provider={PROVIDER_GOOGLE}
               style={styles.map}
               initialRegion={{
@@ -56,8 +80,6 @@ const ShowIce = ({ navigation }: { navigation: any }) => {
               />
             </MapView>
           </View>
-
-    
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

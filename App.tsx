@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { PaperProvider, DefaultTheme } from "react-native-paper";
 import Menu from "./screens/Menu";
 import HomeScreen from "./screens/HomeScreen";
 import ReceiveMenu from "./screens/ReceivePages/ReceiveMenu";
@@ -20,7 +21,9 @@ import EditIce from "./screens/EditPages/EditIce";
 const Stack = createStackNavigator();
 
 const App = () => {
+  
   return (
+    <PaperProvider>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -38,6 +41,7 @@ const App = () => {
         <Stack.Screen name="AddSchool" component={AddSchool} />
       </Stack.Navigator>
     </NavigationContainer>
+    </PaperProvider>
   );
 };
 

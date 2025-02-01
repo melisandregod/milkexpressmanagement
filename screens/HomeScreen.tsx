@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet,View } from "react-native";
 import Header from "../component/Header";
 import 'react-native-gesture-handler';
 import Menu from "./Menu";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { Appbar } from 'react-native-paper';
 
 
 
@@ -18,6 +19,12 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     </SafeAreaView>
     </SafeAreaProvider>
     
+    // <View>
+    // <Appbar.Header mode="center-aligned" style={{backgroundColor: '#00BFFF'}}>
+    //   <Appbar.Content title="รายการส่งนมให้โรงเรียน" color="white"/>
+    // </Appbar.Header>
+    // <Menu navigation={navigation}/>
+    // </View>
   );
 }
 

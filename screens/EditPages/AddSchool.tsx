@@ -3,6 +3,8 @@ import { View, Text, TextInput, StyleSheet, Button, Alert } from "react-native";
 import Header from "../../component/Header";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { addSchool } from "../../database/SchoolDB";
+import ButtonBack from "../../component/BackButton";
+import Button1 from "../../component/ButtonProps";
 
 const AddSchool = ({ navigation }: { navigation: any }) => {
   const [name, setName] = useState("");
@@ -24,23 +26,32 @@ const AddSchool = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#00BFFF" }}>
-        <View style={{ flex: 1, backgroundColor: "#fff", padding: 20 }}>
+        <View style={{ flex: 1, backgroundColor: "#fff"}}>
           <Header title="เพิ่มข้อมูล" />
-
+          <ButtonBack
+            text="back"
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                alert("No screen to go back to!");
+              }
+            }}
+          />
           <View style={styles.container}>
-            <Text>โรงเรียน:</Text>
+            <Text style={{ marginRight: 280 }}>โรงเรียน:</Text>
             <TextInput style={styles.input} value={name} onChangeText={setName} />
 
-            <Text>เบอร์ติดต่อ:</Text>
+            <Text style={{ marginRight: 280 }}>เบอร์ติดต่อ:</Text>
             <TextInput style={styles.input} value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" />
 
-            <Text>จำนวนนมที่ส่ง:</Text>
+            <Text style={{ marginRight: 280 }}>จำนวนนมที่ส่ง:</Text>
             <TextInput style={styles.input} value={quantity} onChangeText={setQuantity} keyboardType="numeric" />
 
-            <Text>Google Map:</Text>
+            <Text style={{ marginRight: 280 }}>Google Map:</Text>
             <TextInput style={styles.input} value={googleMap} onChangeText={setGoogleMap} />
 
-            <Button title="ยืนยัน" onPress={handleAddSchool} />
+            <Button1 text="ยืนยัน" onPress={handleAddSchool} />
           </View>
         </View>
       </SafeAreaView>
@@ -51,9 +62,18 @@ const AddSchool = ({ navigation }: { navigation: any }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     gap: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius:10,
+    marginBottom: 300,
+    marginLeft:20,
+    marginRight:20,
+    paddingVertical:40,
+    backgroundColor: "#f8f8f8"
+
   },
   input: {
     width: "90%",

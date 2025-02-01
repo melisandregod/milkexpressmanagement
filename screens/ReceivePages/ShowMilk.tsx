@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Linking, Button, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import Header from "../../component/Header";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import ButtonBack from "../../component/BackButton";
-import { getMilkFactory, initMilkDB, insertDummyMilkFactory } from "../../database/MilkDB"; 
+import {
+  getMilkFactory,
+  initMilkDB,
+  insertDummyMilkFactory,
+} from "../../database/MilkDB";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const ShowMilk = ({ navigation }: { navigation: any }) => {
@@ -15,8 +26,8 @@ const ShowMilk = ({ navigation }: { navigation: any }) => {
   }, []);
 
   const loadFactory = async () => {
-    await initMilkDB(); 
-    await insertDummyMilkFactory(); 
+    await initMilkDB();
+    await insertDummyMilkFactory();
     const factory = await getMilkFactory();
     if (factory) setItem(factory);
     setLoading(false);
@@ -29,17 +40,28 @@ const ShowMilk = ({ navigation }: { navigation: any }) => {
       <SafeAreaView style={styles.statusbar}>
         <Header title={item?.name} />
         <View style={{ flex: 0, backgroundColor: "#ffff" }}>
-          <ButtonBack text="back" onPress={() => navigation.goBack()} />
+          <ButtonBack
+            text="back"
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                alert("No screen to go back to!");
+              }
+            }}
+          />
         </View>
         <View style={styles.container}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoText}>📞 เบอร์ติดต่อ: {item?.phoneNumber}</Text>
+            <Text style={styles.infoText}>
+              📞 เบอร์ติดต่อ: {item?.phoneNumber}
+            </Text>
             <Text style={styles.infoText}>📦 จำนวน: {item?.quantity} ซอง</Text>
           </View>
 
           {/* Google Map */}
           <View style={styles.mapContainer}>
-          <MapView
+            <MapView
               provider={PROVIDER_GOOGLE}
               style={styles.map}
               initialRegion={{
@@ -56,8 +78,6 @@ const ShowMilk = ({ navigation }: { navigation: any }) => {
               />
             </MapView>
           </View>
-
-      
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

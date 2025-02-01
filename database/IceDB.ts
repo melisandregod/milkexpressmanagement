@@ -60,6 +60,6 @@ export const insertDummyIceFactory = async () => {
 
   await db.execAsync(`
     INSERT INTO ice_factory (name, phoneNumber, quantity, googlemap) VALUES
-    ('โรงน้ำแข็ง ขยะจิรารักษ์พย์', '12345678', '600 - 750 กิโล', 'https://maps.google.com/');
+    ('โรงน้ำแข็ง ขยะจิรารักษ์พย์', '12345678', '600', 'https://maps.google.com/');
   `);
 };

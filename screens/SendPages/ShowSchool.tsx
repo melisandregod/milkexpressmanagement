@@ -58,8 +58,38 @@ const ShowSchool = ({ navigation, route }: { navigation: any; route: any }) => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.statusbar}>
         <Header title={item.name} />
-        <View style={{ flex: 0, backgroundColor: "#ffff" }}>
-          <ButtonBack text="back" onPress={() => navigation.goBack()} />
+        <View
+          style={{ flex: 0, backgroundColor: "#ffff", flexDirection: "row" }}
+        >
+          <ButtonBack
+            text="back"
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                alert("No screen to go back to!");
+              }
+            }}
+          />
+          <View
+            style={{
+              paddingVertical: 10,
+              paddingHorizontal: 10,
+              flex: 1,
+            }}
+          >
+            {!status ? (
+              loading ? (
+                <ActivityIndicator size="large" color="#00BFFF" />
+              ) : (
+                <TouchableOpacity onPress={handleConfirm} style={styles.button}>
+                  <Text style={styles.buttonText}>ยืนยันการส่ง</Text>
+                </TouchableOpacity>
+              )
+            ) : (
+              <Text style={styles.confirmedText}>ส่งแล้ว</Text>
+            )}
+          </View>
         </View>
         <View style={styles.container}>
           <View style={styles.infoBox}>
@@ -76,18 +106,6 @@ const ShowSchool = ({ navigation, route }: { navigation: any; route: any }) => {
               <Text>📍 ไม่มีพิกัด</Text>
             )}
           </View>
-
-          {!status ? (
-            loading ? (
-              <ActivityIndicator size="large" color="#00BFFF" />
-            ) : (
-              <TouchableOpacity onPress={handleConfirm} style={styles.button}>
-                <Text style={styles.buttonText}>ยืนยันการส่ง</Text>
-              </TouchableOpacity>
-            )
-          ) : (
-            <Text style={styles.confirmedText}>✅ ส่งแล้ว</Text>
-          )}
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -144,6 +162,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "green",
     fontWeight: "bold",
+    marginLeft: "auto",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
   },
   button: {
     backgroundColor: "#00BFFF",
@@ -151,10 +172,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 10,
     alignItems: "center",
+    marginLeft: "auto",
   },
   buttonText: {
     color: "white",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

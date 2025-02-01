@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import Button1 from "../component/ButtonProps";
+import { Button } from "react-native-paper";
 
 const Menu = ({ navigation }: { navigation: any }) => {
   return (

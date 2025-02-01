@@ -8,25 +8,33 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 const ReceiveMenu = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1,backgroundColor: "#00BFFF" }}>
-        <View style={{flex:1 ,backgroundColor:"#ffff"}}>
-        <Header title="รับนม" />
-        <ButtonBack text="back" onPress={() => navigation.goBack()} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#00BFFF" }}>
+        <View style={{ flex: 1, backgroundColor: "#ffff" }}>
+          <Header title="รับนม" />
+          <ButtonBack
+            text="back"
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                alert("No screen to go back to!");
+              }
+            }}
+          />
 
-        <View style={styles.container}>
-          <Button1
-            text="โรงน้ำเเข็ง"
-            onPress={() => navigation.navigate("ShowIce")}
-          />
-          <Button1
-            text="โรงนม"
-            onPress={() => navigation.navigate("ShowMilk")}
-          />
-        </View>
+          <View style={styles.container}>
+            <Button1
+              text="โรงน้ำเเข็ง"
+              onPress={() => navigation.navigate("ShowIce")}
+            />
+            <Button1
+              text="โรงนม"
+              onPress={() => navigation.navigate("ShowMilk")}
+            />
+          </View>
         </View>
       </SafeAreaView>
-      </SafeAreaProvider>
-
+    </SafeAreaProvider>
   );
 };
 

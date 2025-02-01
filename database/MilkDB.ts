@@ -56,6 +56,6 @@ export const insertDummyMilkFactory = async () => {
 
   await db.execAsync(`
     INSERT INTO milk_factory (name, phoneNumber, quantity, googlemap) VALUES
-    ('สหกรณ์ โคนมขะจำ - นัยทรายจิรกัด', 'เบอร์ติดต่อ ?', '4000 - 5000 ซอง/วัน', 'https://maps.google.com/');
+    ('สหกรณ์ โคนมขะจำ - นัยทรายจิรกัด', '0843432425542', '4000', 'https://maps.google.com/');
   `);
 };

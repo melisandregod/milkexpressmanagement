@@ -6,10 +6,16 @@ import Header from "../../component/Header";
 import Button1 from "../../component/ButtonProps";
 import ButtonBack from "../../component/BackButton";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { getAllSchools, initDB, insertDummyData } from "../../database/SchoolDB"; // ✅ ใช้ SQLite
+import {
+  getAllSchools,
+  initDB,
+  insertDummyData,
+} from "../../database/SchoolDB"; // ✅ ใช้ SQLite
 
 const SendMenu = ({ navigation }: { navigation: any }) => {
-  const [data, setData] = useState<{ id: number; name: string; quantity: number; status: boolean }[]>([]);
+  const [data, setData] = useState<
+    { id: number; name: string; quantity: number; status: boolean }[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   // ✅ โหลดข้อมูลทุกครั้งที่เข้าสู่หน้านี้
@@ -41,7 +47,16 @@ const SendMenu = ({ navigation }: { navigation: any }) => {
       <SafeAreaView style={{ flex: 1, backgroundColor: "#00BFFF" }}>
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
           <Header title="ส่งนม" />
-          <ButtonBack text="back" onPress={() => navigation.goBack()} />
+          <ButtonBack
+            text="back"
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                alert("No screen to go back to!");
+              }
+            }}
+          />
 
           <View style={styles.container}>
             {loading ? (
@@ -51,7 +66,12 @@ const SendMenu = ({ navigation }: { navigation: any }) => {
                 data={data}
                 renderItem={({ item }) => (
                   <View style={styles.item}>
-                    <Button1 text={item.name} onPress={() => navigation.navigate("ShowSchool", { id: item.id })} />
+                    <Button1
+                      text={item.name}
+                      onPress={() =>
+                        navigation.navigate("ShowSchool", { id: item.id })
+                      }
+                    />
                     <CheckBox checked={item.status} disabled />
                   </View>
                 )}
@@ -70,7 +90,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f8f8",
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius:10,
+    marginBottom: 20,
+    marginLeft:20,
+    marginRight:20,
+    paddingVertical:20,
+    paddingHorizontal:20
   },
   item: {
     marginVertical: 10,
